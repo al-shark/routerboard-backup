@@ -78,6 +78,8 @@ class SSHConnector extends AbstractRouterBoard
             if ($bfs->saveBackupFile($addr, $scp->get($filename . '.backup'), $folder, $filename, 'backup', $identity) &&
                 $bfs->saveBackupFile($addr, $scp->get($filename . '.rsc'), $folder, $filename, 'rsc', $identity)
             ) {
+                // remove backup files after successfull download (security up)
+                $ssh->exec('file remove [/file find where name~"' . $user . '"]');
                 $this->sshDisconnect($ssh);
                 return true;
             }
